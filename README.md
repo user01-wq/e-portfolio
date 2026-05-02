@@ -94,6 +94,32 @@ npm run dev
 
 ---
 
+## ▲ Deploy บน Vercel (แนะนำสำหรับผู้ที่ Fork)
+
+วิธีนี้ **ง่ายที่สุด** — ไม่ต้องมี server เอง ไม่ต้องใช้ Docker
+
+### ขั้นตอนเดียว: Import จาก GitHub
+
+1. ไปที่ [vercel.com/new](https://vercel.com/new) → **Import Git Repository**
+2. เลือก repo ที่ Fork มา
+3. Vercel จะ detect เป็น **Vite** อัตโนมัติ (ไม่ต้องตั้งค่า build)
+4. เปิด **Environment Variables** แล้วเพิ่ม 2 ค่า:
+
+   | Key | Value |
+   |-----|-------|
+   | `VITE_SUPABASE_URL` | `https://xxxx.supabase.co` |
+   | `VITE_SUPABASE_ANON_KEY` | `eyJhbG...` |
+
+5. กด **Deploy** — รอ ~1 นาที ✅
+
+> **หา URL + Key ได้ที่:** Supabase Dashboard → Project Settings → API
+
+### อัปเดตเว็บเมื่อแก้โค้ด
+
+Vercel **auto-deploy** ทุกครั้งที่ `git push` — ไม่ต้องทำอะไรเพิ่ม
+
+---
+
 ## 🐳 รันด้วย Docker (ตัวเลือก)
 
 ```bash
