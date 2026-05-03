@@ -270,19 +270,22 @@ function setVideoRef(id, el) {
               ></iframe>
 
               <!-- Gradient overlay -->
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/30 to-transparent"></div>
+              <div class="absolute inset-0 bg-gradient-to-b from-black/25 via-black/20 to-black/65"></div>
 
-              <!-- Caption -->
-              <div v-if="currentBanner.title || currentBanner.caption" class="absolute bottom-0 inset-x-0 p-5 sm:p-8">
-                <div class="max-w-2xl">
-                  <span v-if="currentBanner.is_pinned" class="inline-flex items-center gap-1 px-2 py-0.5 mb-2 bg-amber-400/90 text-amber-900 text-xs font-bold rounded-full">
+              <!-- Caption — centered frosted glass card -->
+              <div
+                v-if="currentBanner.title || currentBanner.caption || currentBanner.link_url"
+                class="absolute inset-0 flex flex-col items-center justify-center p-4 sm:p-10 z-10 pointer-events-none"
+              >
+                <div class="max-w-lg w-full text-center bg-black/50 backdrop-blur-xl rounded-2xl px-6 py-5 sm:px-8 sm:py-7 border border-white/15 shadow-2xl pointer-events-auto">
+                  <span v-if="currentBanner.is_pinned" class="inline-flex items-center gap-1 px-2.5 py-0.5 mb-3 bg-amber-400/90 text-amber-900 text-xs font-bold rounded-full">
                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1.586l3.707 3.707A1 1 0 0115 9v3a1 1 0 01-1 1h-3v4a1 1 0 11-2 0v-4H6a1 1 0 01-1-1V9a1 1 0 01.293-.707L9 4.586V3a1 1 0 011-1z"/></svg>
                     ตรึงไว้
                   </span>
                   <h2 v-if="currentBanner.title" class="text-xl sm:text-3xl font-extrabold text-white drop-shadow-lg leading-tight">{{ currentBanner.title }}</h2>
-                  <p  v-if="currentBanner.caption" class="mt-1 text-sm sm:text-base text-slate-200/90 line-clamp-2">{{ currentBanner.caption }}</p>
+                  <p v-if="currentBanner.caption" class="mt-2 text-sm sm:text-base text-slate-200/90 leading-relaxed">{{ currentBanner.caption }}</p>
                   <a v-if="currentBanner.link_url" :href="currentBanner.link_url" target="_blank" rel="noopener noreferrer"
-                    class="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-white/15 hover:bg-white/25 backdrop-blur-md text-white text-sm font-semibold rounded-xl border border-white/20 transition-all">
+                    class="mt-4 inline-flex items-center gap-2 px-5 py-2 bg-white/20 hover:bg-white/35 backdrop-blur-md text-white text-sm font-semibold rounded-xl border border-white/25 transition-all hover:scale-105">
                     อ่านต่อ
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                   </a>
