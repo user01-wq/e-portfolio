@@ -14,6 +14,23 @@ onMounted(async () => {
   window.addEventListener('scroll', onScroll, { passive: true })
   onScroll()
 })
+
+// ── Favicon จาก logo_url ──────────────────────────────────────────────────────
+watch(logoUrl, (url) => {
+  if (!url) return
+  let link = document.querySelector("link[rel~='icon']")
+  if (!link) {
+    link = document.createElement('link')
+    link.rel = 'icon'
+    document.head.appendChild(link)
+  }
+  link.href = url
+}, { immediate: true })
+
+// ── Title จาก site_name ───────────────────────────────────────────────────────
+watch(siteName, (name) => {
+  if (name) document.title = name
+}, { immediate: true })
 function onScroll() { scrolled.value = window.scrollY > 12 }
 watch(() => route.fullPath, () => { mobileOpen.value = false })
 

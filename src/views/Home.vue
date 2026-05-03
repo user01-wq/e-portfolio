@@ -179,6 +179,7 @@ watch(currentSlide, () => { nextTick(scheduleNext) })
 watch(displayBanners, () => { currentSlide.value = 0; nextTick(scheduleNext) })
 
 const hasBanners      = computed(() => (profile.value.show_banners ?? true) && banners.value.length > 0)
+const hasActionBar    = computed(() => displayBanners.value.length > 1 || !!currentBanner.value?.link_url)
 const showProfileCard = computed(() => profile.value.show_profile !== false)
 const sectionTitle    = computed(() => profile.value.portfolio_title    || 'สื่อการสอนล่าสุด')
 const sectionBtnText  = computed(() => profile.value.portfolio_btn_text || 'คลังสื่อการสอน')
@@ -272,25 +273,20 @@ function setVideoRef(id, el) {
               <!-- Gradient overlay -->
               <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/40"></div>
 
-              <!-- Caption bar — full width, bottom, subtle -->
+              <!-- ชั้น 1: Caption text — อยู่ใน transition (slide/fade ไปกับแบนเนอร์) -->
               <div
-                v-if="currentBanner.title || currentBanner.caption || currentBanner.link_url"
-                class="absolute bottom-0 inset-x-0 z-10 bg-black/30 backdrop-blur-sm pb-6"
+                v-if="currentBanner.title || currentBanner.caption"
+                :class="['absolute inset-x-0 z-10 bg-black/30 backdrop-blur-sm', hasActionBar ? 'bottom-10' : 'bottom-0']"
               >
-                <div class="flex flex-col items-center text-center gap-0.5 px-6 pt-2.5 sm:px-16 sm:pt-3">
+                <div class="flex flex-col items-center text-center gap-0.5 px-4 pt-2 pb-1.5 sm:px-10">
                   <div class="flex items-center justify-center gap-2 flex-wrap">
                     <span v-if="currentBanner.is_pinned" class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-400/90 text-amber-900 text-xs font-bold rounded-full">
                       <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1.586l3.707 3.707A1 1 0 0115 9v3a1 1 0 01-1 1h-3v4a1 1 0 01-1-1V9a1 1 0 01.293-.707L9 4.586V3a1 1 0 011-1z"/></svg>
                       ตรึงไว้
                     </span>
-                    <h2 v-if="currentBanner.title" class="text-sm sm:text-base font-bold text-white leading-tight">{{ currentBanner.title }}</h2>
+                    <h2 v-if="currentBanner.title" class="text-sm sm:text-base font-semibold text-white leading-tight">{{ currentBanner.title }}</h2>
                   </div>
-                  <p v-if="currentBanner.caption" class="text-xs sm:text-sm text-white/70 leading-snug">{{ currentBanner.caption }}</p>
-                  <a v-if="currentBanner.link_url" :href="currentBanner.link_url" target="_blank" rel="noopener noreferrer"
-                    class="mt-1.5 inline-flex items-center gap-1.5 px-4 py-1.5 bg-white text-slate-800 text-xs font-bold rounded-lg shadow-md hover:bg-slate-100 transition-all hover:scale-105">
-                    อ่านต่อ
-                    <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                  </a>
+                  <p v-if="currentBanner.caption" class="text-xs sm:text-sm text-white/75 leading-snug">{{ currentBanner.caption }}</p>
                 </div>
               </div>
             </div>
@@ -306,11 +302,22 @@ function setVideoRef(id, el) {
             <svg class="h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
           </button>
 
-          <!-- Dots — วางชิดล่าง ทับบน padding ของ caption bar -->
-          <div v-if="displayBanners.length > 1" class="absolute bottom-0 inset-x-0 z-20 flex justify-center pb-2 pointer-events-none">
-            <div class="flex items-center gap-1.5 pointer-events-auto">
+          <!-- ชั้น 2: Action bar — อยู่นอก transition (คงที่ ไม่ animate) -->
+          <!-- รวม dots + ปุ่มลิงค์ ไม่ทับ caption text -->
+          <div
+            v-if="hasActionBar"
+            class="absolute bottom-0 inset-x-0 h-10 z-20 flex items-center justify-center gap-3 bg-black/20 backdrop-blur-sm"
+          >
+            <!-- ปุ่มลิงค์ -->
+            <a v-if="currentBanner?.link_url" :href="currentBanner.link_url" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-1 px-3 py-1 bg-white text-slate-800 text-xs font-bold rounded-lg shadow-sm hover:bg-slate-100 transition-all hover:scale-105">
+              อ่านต่อ
+              <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+            <!-- Dots -->
+            <div v-if="displayBanners.length > 1" class="flex items-center gap-1.5">
               <button v-for="(b, i) in displayBanners" :key="b.id + '-dot'" @click="goSlide(i)"
-                :class="['h-1.5 rounded-full transition-all duration-300 border border-white/30', i === currentSlide ? 'w-7 bg-white' : 'w-1.5 bg-white/40 hover:bg-white/60']"
+                :class="['h-1.5 rounded-full transition-all duration-300 border border-white/30', i === currentSlide ? 'w-6 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/70']"
                 :aria-label="`สไลด์ที่ ${i+1}`"></button>
             </div>
           </div>
