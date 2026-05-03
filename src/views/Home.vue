@@ -287,9 +287,9 @@ function setVideoRef(id, el) {
                   </div>
                   <p v-if="currentBanner.caption" class="text-xs sm:text-sm text-white/70 leading-snug">{{ currentBanner.caption }}</p>
                   <a v-if="currentBanner.link_url" :href="currentBanner.link_url" target="_blank" rel="noopener noreferrer"
-                    class="mt-1 inline-flex items-center gap-1 px-3 py-1 bg-white/15 hover:bg-white/25 text-white text-xs font-medium rounded-lg border border-white/20 transition-all">
+                    class="mt-1.5 inline-flex items-center gap-1.5 px-4 py-1.5 bg-white text-slate-800 text-xs font-bold rounded-lg shadow-md hover:bg-slate-100 transition-all hover:scale-105">
                     อ่านต่อ
-                    <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                   </a>
                 </div>
               </div>
