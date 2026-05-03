@@ -16,12 +16,17 @@ jobs:
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             "${{ secrets.VITE_SUPABASE_URL }}/rest/v1/profiles?select=id&limit=1" \
             -H "apikey: ${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.VITE_SUPABASE_ANON_KEY }}")
+            -H "Authorization: Bearer ${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
+            --max-time 15 \
+            --connect-timeout 10) || STATUS="curl_error"
 
           echo "HTTP Status: $STATUS"
 
-          if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 300 ]; then
+          if [[ "$STATUS" =~ ^[0-9]+$ ]] && [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 300 ]; then
             echo "✅ Supabase is awake!"
+          elif [ "$STATUS" = "curl_error" ]; then
+            echo "❌ curl failed — check VITE_SUPABASE_URL secret"
+            exit 1
           else
             echo "⚠️ Unexpected status: $STATUS"
             exit 1
