@@ -276,7 +276,7 @@ function setVideoRef(id, el) {
               <!-- ชั้น 1: Caption text — อยู่ใน transition (slide/fade ไปกับแบนเนอร์) -->
               <div
                 v-if="currentBanner.title || currentBanner.caption"
-                :class="['absolute inset-x-0 z-10 bg-black/30 backdrop-blur-sm', hasActionBar ? 'bottom-10' : 'bottom-0']"
+                :class="['absolute inset-x-0 z-30 bg-black/30 backdrop-blur-sm', hasActionBar ? 'bottom-10' : 'bottom-0']"
               >
                 <div class="flex flex-col items-center text-center gap-0.5 px-4 pt-2 pb-1.5 sm:px-10">
                   <div class="flex items-center justify-center gap-2 flex-wrap">
@@ -303,10 +303,10 @@ function setVideoRef(id, el) {
           </button>
 
           <!-- ชั้น 2: Action bar — อยู่นอก transition (คงที่ ไม่ animate) -->
-          <!-- รวม dots + ปุ่มลิงค์ ไม่ทับ caption text -->
+          <!-- รวม dots + ปุ่มลิงค์ ไม่ทับ caption text — z-30 เพื่อลอยเหนือ profile card -->
           <div
             v-if="hasActionBar"
-            class="absolute bottom-0 inset-x-0 h-10 z-20 flex items-center justify-center gap-3 bg-black/20 backdrop-blur-sm"
+            class="absolute bottom-0 inset-x-0 h-10 z-30 flex items-center justify-center gap-3 bg-black/20 backdrop-blur-sm"
           >
             <!-- ปุ่มลิงค์ -->
             <a v-if="currentBanner?.link_url" :href="currentBanner.link_url" target="_blank" rel="noopener noreferrer"

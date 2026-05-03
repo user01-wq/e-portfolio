@@ -94,9 +94,9 @@ const navLinks = computed(() => {
 
             <!-- Logo -->
             <RouterLink to="/" class="flex items-center gap-2 group">
-              <div class="w-9 h-9 rounded-xl overflow-hidden shadow-lg group-hover:scale-110 transition-transform flex-shrink-0">
-                <img v-if="logoUrl" :src="logoUrl" class="w-full h-full object-cover" alt="logo" />
-                <div v-else :class="['w-full h-full bg-gradient-to-br flex items-center justify-center', themeColors.btnGrad]">
+              <div class="w-9 h-9 rounded-xl overflow-hidden group-hover:scale-110 transition-transform flex-shrink-0 bg-transparent">
+                <img v-if="logoUrl" :src="logoUrl" class="w-full h-full object-contain" alt="logo" />
+                <div v-else :class="['w-full h-full bg-gradient-to-br flex items-center justify-center rounded-xl', themeColors.btnGrad]">
                   <span class="text-white font-bold text-sm">{{ (siteName || 'K').charAt(0).toUpperCase() }}</span>
                 </div>
               </div>
