@@ -28,6 +28,13 @@
 
 ---
 
+### 🎬 ก่อนเริ่ม — ดูวิดีโอสอนสมัคร GitHub และ Vercel
+
+> ยังไม่มีบัญชี GitHub หรือ Vercel? ดูวิดีโอสอนได้ที่  
+> 📺 **[youtube.com/@WinaiVibeCoding](https://www.youtube.com/@WinaiVibeCoding)**
+
+---
+
 ### ขั้นตอนที่ 1 — Fork repo
 
 1. ไปที่ **[github.com/user01-wq/e-portfolio](https://github.com/user01-wq/e-portfolio)**
