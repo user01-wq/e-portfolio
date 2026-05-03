@@ -94,11 +94,15 @@ const navLinks = computed(() => {
 
             <!-- Logo -->
             <RouterLink to="/" class="flex items-center gap-2 group">
-              <div class="w-9 h-9 rounded-xl overflow-hidden group-hover:scale-110 transition-transform flex-shrink-0 bg-transparent">
-                <img v-if="logoUrl" :src="logoUrl" class="w-full h-full object-contain" alt="logo" />
-                <div v-else :class="['w-full h-full bg-gradient-to-br flex items-center justify-center rounded-xl', themeColors.btnGrad]">
-                  <span class="text-white font-bold text-sm">{{ (siteName || 'K').charAt(0).toUpperCase() }}</span>
-                </div>
+              <!-- Logo: ไม่มี wrapper เพื่อให้ PNG transparent ใช้งานได้ -->
+              <img
+                v-if="logoUrl"
+                :src="logoUrl"
+                class="w-9 h-9 rounded-xl object-contain flex-shrink-0 group-hover:scale-110 transition-transform"
+                alt="logo"
+              />
+              <div v-else :class="['w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform bg-gradient-to-br shadow-lg', themeColors.btnGrad]">
+                <span class="text-white font-bold text-sm">{{ (siteName || 'K').charAt(0).toUpperCase() }}</span>
               </div>
               <span :class="['text-base sm:text-lg font-bold tracking-tight', isLight ? 'text-slate-800' : 'text-white']">{{ siteName }}</span>
             </RouterLink>
