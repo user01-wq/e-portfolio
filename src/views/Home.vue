@@ -125,16 +125,18 @@ function goSlide(i) {
 function scheduleNext() {
   clearTimer()
   if (displayBanners.value.length < 2) return
-  if (isPaused.value) return
 
   const current = currentBanner.value
   if (!current) return
 
+  // หยุดวิดีโออื่นที่ไม่ใช่สไลด์ปัจจุบัน
   for (const [id, vid] of Object.entries(videoRefs.value)) {
     if (vid && id !== current.id) { vid.pause(); vid.currentTime = 0 }
   }
 
   if (current.media_type === 'video') {
+    // วิดีโอ: เริ่มเล่นเสมอ ไม่สนใจ isPaused
+    // (ทั้งเปลี่ยนเองอัตโนมัติ และคลิกเปลี่ยนด้วยตัวเอง)
     const v = videoRefs.value[current.id]
     if (v) {
       v.currentTime = 0
@@ -143,10 +145,14 @@ function scheduleNext() {
     } else {
       advanceTimer = setTimeout(nextSlide, IMAGE_INTERVAL)
     }
-  } else if (current.media_type === 'google_slide' || current.media_type === 'canva') {
-    advanceTimer = setTimeout(nextSlide, EMBED_INTERVAL)
   } else {
-    advanceTimer = setTimeout(nextSlide, IMAGE_INTERVAL)
+    // รูป / Google Slides / Canva: หยุดถ้า hover อยู่
+    if (isPaused.value) return
+    if (current.media_type === 'google_slide' || current.media_type === 'canva') {
+      advanceTimer = setTimeout(nextSlide, EMBED_INTERVAL)
+    } else {
+      advanceTimer = setTimeout(nextSlide, IMAGE_INTERVAL)
+    }
   }
 }
 
