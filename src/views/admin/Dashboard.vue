@@ -1,6 +1,31 @@
 <script setup>
 import { ref, onMounted, inject, computed, watch } from 'vue'
 import { supabase } from '../../lib/supabase'
+import Swal from 'sweetalert2'
+
+// ── SweetAlert2 helpers ──────────────────────────────────────────────────────
+const swal = Swal.mixin({
+  confirmButtonColor: '#3b82f6',
+  cancelButtonColor:  '#6b7280',
+  cancelButtonText:   'ยกเลิก',
+  reverseButtons:     true,
+  customClass: { popup: '!rounded-2xl', confirmButton: '!rounded-lg !px-5', cancelButton: '!rounded-lg !px-5' },
+})
+
+async function confirmDelete(title, text = 'ไม่สามารถกู้คืนได้') {
+  const { isConfirmed } = await swal.fire({
+    title, text,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'ลบ',
+    confirmButtonColor: '#ef4444',
+  })
+  return isConfirmed
+}
+
+async function alertError(title, text = '') {
+  return swal.fire({ icon: 'error', title, text: text || undefined })
+}
 import { Cropper } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css'
 import { QuillEditor } from '@vueup/vue-quill'
@@ -218,7 +243,7 @@ async function saveProfile() {
       setTimeout(() => successMsg.value = '', 3000)
     }
   } catch (error) {
-    alert('Error saving profile: ' + error.message)
+    await alertError('บันทึกไม่สำเร็จ', error.message)
   } finally {
     saving.value = false
   }
@@ -363,7 +388,7 @@ async function uploadCroppedImage() {
 
       showCropModal.value = false
     } catch (error) {
-      alert('Error uploading image: ' + error.message)
+      await alertError('อัปโหลดรูปไม่สำเร็จ', error.message)
     } finally {
       uploadingImage.value = false
     }
@@ -385,7 +410,7 @@ function editProject(proj) {
 }
 
 async function deleteProject(id) {
-  if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบผลงานนี้?')) {
+  if (await confirmDelete('ลบผลงานนี้?')) {
     const target = projects.value.find(p => p.id === id)
     if (target) {
       await Promise.all([
@@ -458,7 +483,7 @@ async function saveProject() {
     showProjectModal.value = false
     await loadData()
   } catch (error) {
-    alert('Error saving project: ' + error.message)
+    await alertError('บันทึกผลงานไม่สำเร็จ', error.message)
   } finally {
     savingProject.value = false
   }
@@ -482,7 +507,7 @@ function editExp(exp) {
 }
 
 async function deleteExp(id) {
-  if (confirm('ยืนยันการลบประสบการณ์ทำงานนี้?')) {
+  if (await confirmDelete('ลบประสบการณ์ทำงานนี้?')) {
     await supabase.from('experiences').delete().eq('id', id)
     await loadData()
   }
@@ -513,7 +538,7 @@ async function saveExp() {
     showExpModal.value = false
     await loadData()
   } catch (error) {
-    alert('บันทึกไม่สำเร็จ: ' + error.message)
+    await alertError('บันทึกไม่สำเร็จ', error.message)
   } finally {
     savingExp.value = false
   }
@@ -538,7 +563,7 @@ function editEdu(edu) {
 }
 
 async function deleteEdu(id) {
-  if (confirm('ยืนยันการลบประวัติการศึกษานี้?')) {
+  if (await confirmDelete('ลบประวัติการศึกษานี้?')) {
     await supabase.from('educations').delete().eq('id', id)
     await loadData()
   }
@@ -567,7 +592,7 @@ async function saveEdu() {
     showEduModal.value = false
     await loadData()
   } catch (error) {
-    alert('บันทึกไม่สำเร็จ: ' + error.message)
+    await alertError('บันทึกไม่สำเร็จ', error.message)
   } finally {
     savingEdu.value = false
   }
@@ -673,7 +698,7 @@ async function markRead(msg) {
 }
 
 async function deleteMessage(id) {
-  if (!confirm('ยืนยันการลบข้อความนี้?')) return
+  if (!await confirmDelete('ลบข้อความนี้?', 'ข้อความจะถูกลบถาวร')) return
   messages.value = messages.value.filter(m => m.id !== id)
   await supabase.from('contact_messages').delete().eq('id', id)
   refreshUnread()
@@ -783,7 +808,7 @@ function editBanner(b) {
 }
 
 async function deleteBanner(id) {
-  if (!confirm('ยืนยันการลบแบนเนอร์นี้? (ไฟล์จะถูกลบจาก storage ด้วย)')) return
+  if (!await confirmDelete('ลบแบนเนอร์นี้?', 'ไฟล์จะถูกลบออกจาก storage ด้วย')) return
   const target = banners.value.find(b => b.id === id)
   if (target) await deleteStorageFileIfOurs(target.media_url)
   await supabase.from('banners').delete().eq('id', id)
@@ -885,7 +910,7 @@ async function saveBanner() {
     showBannerModal.value = false
     await loadData()
   } catch (error) {
-    alert('Error saving banner: ' + error.message)
+    await alertError('บันทึกแบนเนอร์ไม่สำเร็จ', error.message)
   } finally {
     savingBanner.value = false
     uploadingBanner.value = false
