@@ -274,9 +274,10 @@ function setVideoRef(id, el) {
               <div class="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/40"></div>
 
               <!-- ชั้น 1: Caption text — อยู่ใน transition (slide/fade ไปกับแบนเนอร์) -->
+              <!-- bottom-24 = อยู่เหนือ overlap zone (sm:-mt-14 = 3.5rem) + action bar (h-10 = 2.5rem) -->
               <div
                 v-if="currentBanner.title || currentBanner.caption"
-                :class="['absolute inset-x-0 z-30 bg-black/30 backdrop-blur-sm', hasActionBar ? 'bottom-10' : 'bottom-0']"
+                :class="['absolute inset-x-0 z-10 bg-black/30 backdrop-blur-sm', hasActionBar ? 'bottom-24' : 'bottom-14']"
               >
                 <div class="flex flex-col items-center text-center gap-0.5 px-4 pt-2 pb-1.5 sm:px-10">
                   <div class="flex items-center justify-center gap-2 flex-wrap">
@@ -303,10 +304,10 @@ function setVideoRef(id, el) {
           </button>
 
           <!-- ชั้น 2: Action bar — อยู่นอก transition (คงที่ ไม่ animate) -->
-          <!-- รวม dots + ปุ่มลิงค์ ไม่ทับ caption text — z-30 เพื่อลอยเหนือ profile card -->
+          <!-- bottom-14 = พอดีเหนือ overlap zone (sm:-mt-14) ไม่ทับ profile card -->
           <div
             v-if="hasActionBar"
-            class="absolute bottom-0 inset-x-0 h-10 z-30 flex items-center justify-center gap-3 bg-black/20 backdrop-blur-sm"
+            class="absolute bottom-14 inset-x-0 h-10 z-20 flex items-center justify-center gap-3 bg-black/20 backdrop-blur-sm"
           >
             <!-- ปุ่มลิงค์ -->
             <a v-if="currentBanner?.link_url" :href="currentBanner.link_url" target="_blank" rel="noopener noreferrer"
