@@ -23,8 +23,11 @@
 
 ### ขั้นตอนที่ 1 — Fork & Clone
 
+1. ไปที่ **[github.com/user01-wq/e-portfolio](https://github.com/user01-wq/e-portfolio)**
+2. กดปุ่ม **Fork** (มุมขวาบน) → กด **Create fork**
+3. Clone repo ของคุณเอง (ที่เพิ่ง fork มา):
+
 ```bash
-# Fork บน GitHub ก่อน แล้ว clone repo ของคุณ
 git clone https://github.com/<your-username>/e-portfolio.git
 cd e-portfolio
 npm install
@@ -177,6 +180,9 @@ supabase/
 ---
 
 ## 🔄 อัปเดต Migration (สำหรับผู้ใช้เดิมที่มีข้อมูลอยู่แล้ว)
+
+> ⚠️ **คนที่ Fork ใหม่ไม่ต้องทำส่วนนี้** — `setup.sql` มีทุกอย่างครบแล้ว  
+> ส่วนนี้สำหรับ **ผู้ที่ใช้ version เก่าก่อนหน้า** และมีข้อมูลอยู่แล้ว ไม่อยากลบทิ้ง
 
 หากคุณใช้โปรเจกต์นี้มาก่อนแล้ว และต้องการอัปเดตให้รองรับฟีเจอร์ใหม่  
 ให้รัน migration เพิ่มเติมตามลำดับใน SQL Editor:
