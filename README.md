@@ -21,17 +21,34 @@
 
 ## 🚀 วิธีติดตั้ง (สำหรับคนที่ Fork)
 
-### ขั้นตอนที่ 1 — Fork & Clone
+> **เลือกเส้นทางที่เหมาะกับคุณ:**
+>
+> | 👩‍🏫 ครูทั่วไป (แนะนำ) | 👨‍💻 นักพัฒนา |
+> |---|---|
+> | Fork → Supabase → Vercel | Fork → Supabase → Clone → รันบนเครื่อง |
+> | **ไม่ต้องใช้ Terminal เลย** | ต้องมี Node.js บนเครื่อง |
+> | ข้ามไปขั้นตอนที่ 2 ได้เลย | ทำครบทุกขั้นตอน |
+
+---
+
+### ขั้นตอนที่ 1 — Fork
 
 1. ไปที่ **[github.com/user01-wq/e-portfolio](https://github.com/user01-wq/e-portfolio)**
 2. กดปุ่ม **Fork** (มุมขวาบน) → กด **Create fork**
-3. Clone repo ของคุณเอง (ที่เพิ่ง fork มา):
+
+> 👩‍🏫 **ครูทั่วไป:** ทำแค่นี้พอ ข้ามไป **ขั้นตอนที่ 2** ได้เลย — ไม่ต้อง clone หรือรันคำสั่งใดๆ
+
+<details>
+<summary>👨‍💻 นักพัฒนา: Clone เพื่อรันบนเครื่อง (คลิกเพื่อขยาย)</summary>
 
 ```bash
-git clone https://github.com/<your-username>/e-portfolio.git
+# เปิด Terminal แล้วพิมพ์ (แทนที่ your-username ด้วยชื่อ GitHub ของคุณ)
+git clone https://github.com/your-username/e-portfolio.git
 cd e-portfolio
 npm install
 ```
+
+</details>
 
 ---
 
