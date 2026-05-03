@@ -343,6 +343,7 @@ async function uploadCroppedImage() {
       const { data: publicUrlData } = supabase.storage.from(bucket).getPublicUrl(fileName)
 
       if (cropTarget.value === 'avatar') {
+        if (profile.value.avatar_url) await deleteStorageFileIfOurs(profile.value.avatar_url)
         profile.value.avatar_url = publicUrlData.publicUrl
         await saveProfile()
       } else if (cropTarget.value === 'logo') {
@@ -355,6 +356,8 @@ async function uploadCroppedImage() {
         editingBanner.value.media_url = publicUrlData.publicUrl
         editingBanner.value.media_type = 'image'
       } else {
+        // project cover — ลบรูปเก่าออกจาก storage ก่อนเปลี่ยน
+        if (editingProject.value.image_url) await deleteStorageFileIfOurs(editingProject.value.image_url)
         editingProject.value.image_url = publicUrlData.publicUrl
       }
 
@@ -383,6 +386,13 @@ function editProject(proj) {
 
 async function deleteProject(id) {
   if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบผลงานนี้?')) {
+    const target = projects.value.find(p => p.id === id)
+    if (target) {
+      await Promise.all([
+        deleteStorageFileIfOurs(target.image_url),
+        deleteStorageFileIfOurs(target.file_path),
+      ])
+    }
     await supabase.from('projects').delete().eq('id', id)
     await loadData()
   }
@@ -432,6 +442,14 @@ async function saveProject() {
     }
 
     if (editingProject.value.id) {
+      // ลบไฟล์เก่าออกจาก storage หากมีการเปลี่ยนแปลง
+      const old = projects.value.find(p => p.id === editingProject.value.id)
+      if (old) {
+        const cleanups = []
+        if (old.file_path  && old.file_path  !== filePath)                       cleanups.push(deleteStorageFileIfOurs(old.file_path))
+        if (old.image_url  && old.image_url  !== editingProject.value.image_url) cleanups.push(deleteStorageFileIfOurs(old.image_url))
+        if (cleanups.length) await Promise.all(cleanups)
+      }
       await supabase.from('projects').update(payload).eq('id', editingProject.value.id)
     } else {
       await supabase.from('projects').insert(payload)
