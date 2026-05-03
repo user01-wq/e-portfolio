@@ -74,12 +74,24 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 ### ขั้นตอนที่ 5 — สร้าง Admin User
 
+เลือกทำแบบใดแบบหนึ่ง:
+
+**วิธี A — ผ่าน Supabase Dashboard (ง่ายที่สุด ไม่ต้องรันอะไร)**
+1. Supabase Dashboard → เมนู **Authentication** → **Users**
+2. กด **Add User** → ใส่อีเมลและรหัสผ่าน → **Create User**
+
+**วิธี B — ผ่าน Script (รันบนเครื่องตัวเอง)**
+
+> ต้องมี Node.js ติดตั้งบนเครื่อง และต้องทำขั้นตอนที่ 4 (.env.local) ก่อน
+
 ```bash
+# เปิด Terminal แล้ว cd เข้าโฟลเดอร์โปรเจกต์
+cd e-portfolio
 node create-admin.mjs
+# สคริปต์จะถามอีเมลและรหัสผ่าน
 ```
 
-สคริปต์จะถามอีเมลและรหัสผ่าน แล้วสร้าง admin account ใน Supabase Auth  
-*(รันครั้งเดียวพอ)*
+*(รันครั้งเดียวพอ — ไม่ต้องรันบน Vercel หรือ server)*
 
 ---
 
