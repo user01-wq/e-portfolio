@@ -150,29 +150,22 @@ function scheduleNext() {
   }
 }
 
-function onVideoEnded(id) {
-  if (!currentBanner.value || currentBanner.value.id !== id) return
-  if (isPaused.value) return
-  nextSlide()
-}
-
 function onMouseEnter() {
+  if (currentBanner.value?.media_type === 'video') return  // วิดีโอ: เล่นต่อไม่หยุด
   isPaused.value = true
   clearTimer()
-  if (currentBanner.value?.media_type === 'video') {
-    const v = videoRefs.value[currentBanner.value.id]
-    if (v) v.pause()
-  }
 }
 
 function onMouseLeave() {
+  if (currentBanner.value?.media_type === 'video') return  // วิดีโอ: ไม่ต้องทำอะไร
   isPaused.value = false
-  if (currentBanner.value?.media_type === 'video') {
-    const v = videoRefs.value[currentBanner.value.id]
-    if (v) { v.play().catch(() => {}) }
-  } else {
-    scheduleNext()
-  }
+  scheduleNext()
+}
+
+function onVideoEnded(id) {
+  if (!currentBanner.value || currentBanner.value.id !== id) return
+  // ไม่เช็ค isPaused — วิดีโอเล่นจบแล้วให้ไปสไลด์ถัดไปเสมอ
+  nextSlide()
 }
 
 watch(currentSlide, () => { nextTick(scheduleNext) })
