@@ -2,8 +2,10 @@ name: Keep Supabase Alive
 
 on:
   schedule:
+    # รันทุก 3 วัน เวลา 08:00 UTC (15:00 น. ไทย)
+    # Supabase free tier หยุดหลัง 7 วันไม่มีกิจกรรม
     - cron: '0 8 */3 * *'
-  workflow_dispatch:
+  workflow_dispatch: # กดรันด้วยตัวเองได้จาก GitHub Actions tab
 
 jobs:
   ping:
@@ -15,7 +17,9 @@ jobs:
             "${{ secrets.VITE_SUPABASE_URL }}/rest/v1/profiles?select=id&limit=1" \
             -H "apikey: ${{ secrets.VITE_SUPABASE_ANON_KEY }}" \
             -H "Authorization: Bearer ${{ secrets.VITE_SUPABASE_ANON_KEY }}")
+
           echo "HTTP Status: $STATUS"
+
           if [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 300 ]; then
             echo "✅ Supabase is awake!"
           else
