@@ -30,8 +30,11 @@ onMounted(async () => {
   if (!sessionStorage.getItem('_spv')) {
     sessionStorage.setItem('_spv', '1')
     try {
-      const { data, error } = await supabase.rpc('increment_site_page_views')
-      if (!error && data != null) pageViews.value = Number(data)
+      await supabase.rpc('increment_site_page_views')
+      // Re-fetch ค่าจริงจาก DB แทนการพึ่งค่าที่ RPC return
+      const { data: pv } = await supabase
+        .from('profiles').select('page_views').limit(1).single()
+      if (pv?.page_views != null) pageViews.value = Number(pv.page_views)
     } catch { /* ignore */ }
   }
 
