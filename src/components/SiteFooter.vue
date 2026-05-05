@@ -30,8 +30,8 @@ onMounted(async () => {
   if (!sessionStorage.getItem('_spv')) {
     sessionStorage.setItem('_spv', '1')
     try {
-      const { data } = await supabase.rpc('increment_site_page_views')
-      if (typeof data === 'number') pageViews.value = data
+      const { data, error } = await supabase.rpc('increment_site_page_views')
+      if (!error && data != null) pageViews.value = Number(data)
     } catch { /* ignore */ }
   }
 
